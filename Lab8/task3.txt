@@ -1,0 +1,151 @@
+Question 1: Can a friend function be used to overload an operator that modifies the
+invoking object?
+Problem Statement:
+Consider the += operator, which modifies the left-hand operand. Can a friend function be used
+to overload this operator?
+- If yes, how should it be implemented?
+- If no, what alternative approach should be used?
+Justify your answer with supporting C++ code.
+
+Ans. Yes
+
+#include <iostream>
+using namespace std;
+
+class add{
+    int a;
+    int b;
+public:
+    add(int a=0, int b=1):a(a), b(b){}
+    friend add operator+=(add& x, const add& y);
+    int geta(){return a;}
+    int getb(){return b;}
+};
+
+add operator+=(add& x, const add& y){
+    x.a+=y.a;
+    x.b+=y.b;
+    return x;
+}
+
+int main(){
+    add a(1,2), b(2, 1);
+    a+=b;
+    cout<<"A: "<< a.geta()<<"\tB: "<<a.getb();
+}
+
+
+Question 2: Is it possible to overload an operator using a friend function if one of the
+operands is a primitive data type?
+Problem Statement:
+Suppose we want to overload the + operator to allow addition between an object and a primitive
+type (e.g., object + int).
+- Can a friend function handle this case?
+- If yes, how would it be implemented?
+- If no, what limitations exist?
+Justify your answer with supporting C++ code.
+
+
+Ans. Yes
+
+#include <iostream>
+using namespace std;
+
+class add{
+    int a;
+public:
+    add(int a=0):a(a){}
+    friend add operator+(add& x, int y);
+    int geta(){return a;}
+};
+
+add operator+(add& x, int y){
+    return add(x.a+y);
+}
+
+int main(){
+    add a(1);
+    add c=a+10;
+    cout<<"A: "<< c.geta();
+}
+
+Question 3: Can a friend function access private and protected members of a class without
+using an object of that class?
+Problem Statement:
+A friend function is granted access to private and protected members of a class.
+- Does it always need an object to access these members?
+- Can a friend function access them directly without an object?
+- Under what conditions might it fail?
+Justify your answer with supporting C++ code.
+
+It always need an object to access non-static members. 
+Static Members can be accessed without any object.
+It might fail to access the parent's private attributes.
+
+#include <iostream>
+using namespace std;
+
+class Base {
+private:
+    int basePrivate;
+
+protected:
+    int baseProtected;
+
+public:
+    Base(int bPrivate, int bProtected) : basePrivate(bPrivate), baseProtected(bProtected) {}
+
+    // Static member
+    static int baseStatic;
+
+    // Friend function declared to have access to private and protected members
+    friend void accessBaseMembers(Base& obj);
+    friend void accessStaticMembers();
+};
+
+// Initialize static member
+int Base::baseStatic = 10;
+
+class Derived : public Base {
+private:
+    int derivedPrivate;
+
+public:
+    Derived(int bPrivate, int bProtected, int dPrivate)
+        : Base(bPrivate, bProtected), derivedPrivate(dPrivate) {}
+
+    // Friend function of derived class
+    friend void accessDerivedMembers(Derived& obj);
+};
+
+// Friend function to access Base class members
+void accessBaseMembers(Base& obj) {
+    cout << "Base class private member: " << obj.basePrivate << endl;
+    cout << "Base class protected member: " << obj.baseProtected << endl;
+}
+
+// Friend function to access static member
+void accessStaticMembers() {
+    cout << "Base class static member: " << Base::baseStatic << endl;
+}
+
+// Friend function to access Derived class private members
+void accessDerivedMembers(Derived& obj) {
+    cout << "Derived class private member: " << obj.derivedPrivate << endl;
+}
+
+int main() {
+    // Creating an object of the Derived class
+    Derived d(1, 2, 3);
+
+    // Accessing private and protected members via friend functions
+    accessBaseMembers(d);  // Accessing Base class private and protected members
+    accessStaticMembers(); // Accessing static member
+
+    accessDerivedMembers(d); // Accessing Derived class private members
+
+    // Accessing static member without an object
+    cout << "Accessing static member directly: " << Base::baseStatic << endl;
+
+    return 0;
+}
