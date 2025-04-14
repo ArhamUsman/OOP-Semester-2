@@ -63,27 +63,3 @@ int main(){
     cout<<"Final Account Details:\n";
     cout<<a1<<a2;
 }
-Task2.cpp
-Displaying Task2.cpp.
-Lab 08 - Lab Tasks
-Shafique Rehman
-•
-Mar 24 (Edited Mar 24)
-8 points
-Due Mar 24, 11:59 PM
-
-OOP_LAB#08 - Lab Taks-BCS-2F - Spring 2025_.pdf
-PDF
-Class comments
-Your work
-Turned in late
-
-Task2.cpp
-Text
-
-Task1.cpp
-Text
-
-OOP-Semester-2/Lab8 at main · ArhamUsman/OOP-Semester-2 · GitHub
-https://github.com/ArhamUsman/OOP-Semester-2/tree/main/Lab8
-Private comments
